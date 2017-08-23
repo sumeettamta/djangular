@@ -15,8 +15,12 @@ dist/
 downloads/
 eggs/
 .eggs/
+bin/
 lib/
 lib64/
+include/
+local/
+pip-selfcheck.json
 parts/
 sdist/
 var/
