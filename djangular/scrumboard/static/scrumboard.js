@@ -1,32 +1,33 @@
 (function(){
     'use strict';
 
-    angular.module('scrumboard.demo',[]).controller('ScrumboardController', [ '$scope', ScrumboardController ]);
+    angular.module('scrumboard.demo',[]).controller('ScrumboardController', [ '$scope','$http', ScrumboardController ]);
 
-    function ScrumboardController($scope){
+    function ScrumboardController($scope,$http){
         $scope.person = {
             name: 'Joe',
             age: 35
         };
+
         $scope.add = function(list, title){
+            console.log(list.id);
             var card = {
+                list: list.id,
                 title: title
             };
-            list.cards.push(card);
-        }
-        $scope.data = [
-            {
-                name: 'Django demo',
-                cards: [
-                    { title: 'Create Models'},{ title: 'Create View'},{ title: 'Migrate Database'},
-                ]
+            $http.post('/scrumboard/cards/',card).then(function(response){
+                list.cards.push(response.data);
             },
-            {
-                name: 'Angular Demo',
-                cards: [
-                    {title: 'Write HTML'},{title: 'Write JavaScript'},
-                ]
+            function(response){
+                alert('error');
             }
-        ]
+            );
+        }
+        $scope.data = [];
+        $http.get('/scrumboard/list/').then(function(response){
+            $scope.data  = response.data;
+            console.log(response.data)
+        });
+
     }
 }());
